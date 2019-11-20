@@ -1,0 +1,63 @@
+from pytube import YouTube
+from tkinter import *
+
+
+#============Settings============
+root = Tk()
+root.title("YouTube Video Downloader")
+root.geometry("800x600") 
+root.attributes("-fullscreen", False)
+root.configure(background="Black")
+#=====================================================\
+quality=IntVar()
+#===================================================
+def clearurl():
+    url.delete(0,END)
+def clearpath():
+    path.delete(0,END)
+def downloadvideo():
+    youtube_url=str(url.get().strip())
+    if youtube_url.startswith('https://www.youtube.com/'):
+        yt = YouTube(youtube_url)
+        videos = yt.streams.all()
+        if  quality.get() == 0:
+            video = videos[0]
+        else:
+            video = videos[len(videos) - 1]
+        video.download(str(path.get().strip()))
+    else:
+        message="# You have entered incorrect URL or Path"
+        update=Label(bottom, text=message).grid(row=0,columns=0)
+
+
+
+#=========================================
+top = Frame(root, bg='Black', width=1000, height=50)
+top.pack(side=TOP)
+bottom = Frame(root, width=800, height=50, bg="White")
+bottom.pack(side=BOTTOM)
+left = Frame(root, width = 700 , height =400 , bg="Blue")
+left.pack(side=LEFT)
+right=Frame(root, width = 200, height = 400, bg="Red")
+right.pack(side=RIGHT)
+#==================================================
+url=Entry(left, font=('arial', 20, 'bold'), width = 30, bd=8, insertwidth=7)
+url.grid(row=1,column=1, sticky=E+S)
+path=Entry(left, font=('arial', 20, 'bold'), width = 30, bd=8, insertwidth=7)
+path.grid(row=2,column=1,sticky=E+S)
+#========================================================
+toplabel=Label(top,font=('consolas', 37, 'bold'), text="YOUTUBE VIDEO DOWNLOADER", bd=8, bg="White").grid(row=0,column=1)
+bottomlabel=Label(bottom,font=('consolas', 37, 'bold'), text="DOWNLOAD ANY VIDEO!", bd=8, bg="yellow").grid(row=0,column=1)
+urllabel=Label(left,font=('arial', 37, 'bold'), text="Url:", bd=8, bg="Blue").grid(row=1,column=0)
+pathlabel=Label(left,font=('arial', 37, 'bold'), text="Path:", bd=8, bg="Blue").grid(row=2,column=0)
+#=======================================================================================================================
+clearbutton=Button(right, font=('arial', 15, 'bold'), text="Clear URL",width =8, command = lambda:clearurl()).grid(row=1,column=1)
+pathbutton=Button(right, font=('arial', 15, 'bold'), text="Clear Path", bd=8, bg="White", width = 8, command= lambda : clearpath() ).grid(row=2,column=1)
+downloadbutton=Button(right,font=('arial', 15, 'bold'), text="Download Video", bd=8, bg="White", width = 12, command= lambda : downloadvideo() ).grid(row=3,column=1)
+
+#======================================================================================================================
+good=Radiobutton(left,font=('arial', 15, 'bold'), text="Good Quality", variable=quality, value= 1, bg = "Black", fg='white' ).grid(row=0,column=0,sticky=W)
+bad=Radiobutton(left,font=('arial', 15, 'bold'), text="Bad Quality", variable = quality, value= 0, bg = "Black", fg='white' ).grid(row=0,column=1,sticky=W)
+root.mainloop()
+
+
